@@ -49,4 +49,17 @@ router.get('/me', authenticateToken, async (req, res) => {
     }
 });
 
+router.delete('/delete', authenticateToken, async (req, res) => {
+    try {
+        const {username} = req.body;
+        const user = await User.findOneAndDelete({username: username});
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.json({ message: 'User deleted successfully' });
+    } catch (err) {
+        res.status(500).json({ message: 'Error deleting user' });
+    }
+});
+
 module.exports = router;
